@@ -2,8 +2,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 30px;
     height: 100vh;
     background-color: rgb(130, 102, 82);
+    margin: 0;
+    padding: 0;
 }
 
 .row {
@@ -26,4 +30,24 @@ body {
 
 .light {
     background-color: white;
+}
+
+.fen-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#fen-input {
+    width: 600px;
+}
+
+#fen-set {
+    height: 40px;
+}
+
+.piece {
+    width: 80px;
+    height: 80px;
 }

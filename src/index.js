@@ -1,16 +1,10 @@
-const board = (() => {
-    let squares = [];
+import { board } from "./board";
+import { drawBoard } from "./dom";
 
-    for (let i = 0; i < 8; i++) {
-        let row = [];
-        for (let j = 1; j <= 8; j++) {
-            row.push(i * 8 + j);
-        }
+const startingFEN = "r1b1kb1r/ppp1pp1p/2nq1np1/3p4/3P1Q2/1P2P1P1/P1P2P1P/RNB1KBNR w KQkq - 0 1";
 
-        squares.push(row);
-    }
+const chessBoard = board();
+chessBoard.setBoard(startingFEN);
+drawBoard(chessBoard.squares);
 
-    return { squares };
-})();
-
-export { board };
+export { chessBoard };
