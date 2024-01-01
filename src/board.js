@@ -44,13 +44,22 @@ const board = () => {
     };
 
     const getSquare = position => {
+        if (position < 0 || position > 63) return null;
+
         const row = Math.floor(position / 8);
         const square = position % 8;
 
         return squares[row][square];
     };
 
-    return { squares, getSquare, setBoard };
+    const rowsTravelled = (start, target) => {
+        const startRow = Math.floor(start / 8);
+        const targetRow = Math.floor(target / 8);
+
+        return Math.abs(startRow - targetRow);
+    };
+
+    return { squares, getSquare, setBoard, rowsTravelled };
 };
 
 export { board };

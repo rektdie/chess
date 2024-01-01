@@ -1,26 +1,26 @@
-import { chessBoard } from "./index.js";
-
 const reqSvgs = require.context("./svgs/figures/", true, /\.svg$/);
 const paths = reqSvgs.keys();
 const svgs = paths.map(path => reqSvgs(path));
 
 const Pawn = (color, position, hasMoved) => {
     const name = "pawn";
-    const legalMoves = [];
+    const offsets = [];
     let icon;
 
     if (color === "dark") {
         icon = svgs[paths.indexOf("./dPawn.svg")];
+        offsets.push(7, 8, 9);
     } else {
+        offsets.push(-7, -8, -9);
         icon = svgs[paths.indexOf("./lPawn.svg")];
     }
 
-    return { color, position, hasMoved, icon, name };
+    return { color, position, hasMoved, icon, name, offsets };
 };
 
 const Knight = (color, position) => {
     const name = "knight";
-    const legalMoves = [];
+    const offsets = [-17, -15, -6, 10, 17, 15, 6, -10];
     let icon;
 
     if (color === "dark") {
@@ -29,12 +29,12 @@ const Knight = (color, position) => {
         icon = svgs[paths.indexOf("./lKnight.svg")];
     }
 
-    return { color, position, icon, name };
+    return { color, position, icon, name, offsets };
 };
 
 const Bishop = (color, position) => {
     const name = "bishop";
-    const legalMoves = [];
+    const offsets = [-9, 9, -7, 7];
     let icon;
 
     if (color === "dark") {
@@ -43,12 +43,12 @@ const Bishop = (color, position) => {
         icon = svgs[paths.indexOf("./lBishop.svg")];
     }
 
-    return { color, position, icon, name };
+    return { color, position, icon, name, offsets };
 };
 
 const Rook = (color, position, hasMoved) => {
     const name = "rook";
-    const legalMoves = [];
+    const offsets = [-1, 1, -8, 8];
     let icon;
 
     if (color === "dark") {
@@ -57,12 +57,12 @@ const Rook = (color, position, hasMoved) => {
         icon = svgs[paths.indexOf("./lRook.svg")];
     }
 
-    return { color, position, hasMoved, icon, name };
+    return { color, position, hasMoved, icon, name, offsets };
 };
 
 const Queen = (color, position) => {
     const name = "queen";
-    const legalMoves = [];
+    const offsets = [-1, 1, -8, 8, -9, 9, -7, 7];
     let icon;
 
     if (color === "dark") {
@@ -71,12 +71,12 @@ const Queen = (color, position) => {
         icon = svgs[paths.indexOf("./lQueen.svg")];
     }
 
-    return { color, position, icon, name };
+    return { color, position, icon, name, offsets };
 };
 
 const King = (color, position, hasMoved) => {
     const name = "king";
-    const legalMoves = [];
+    const offsets = [-9, -8, -7, -1, 1, 7, 8, 9];
     let icon;
 
     if (color === "dark") {
@@ -85,11 +85,12 @@ const King = (color, position, hasMoved) => {
         icon = svgs[paths.indexOf("./lKing.svg")];
     }
 
-    return { color, position, hasMoved, icon, name };
+    return { color, position, hasMoved, icon, name, offsets };
 };
 
 const Empty = position => {
-    return { position };
+    const name = "empty";
+    return { name, position };
 };
 
 export { Pawn, Knight, Bishop, Queen, Rook, King, Empty };

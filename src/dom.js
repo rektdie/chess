@@ -14,7 +14,7 @@ function drawBoard(board) {
             const squareDiv = document.createElement("div");
             squareDiv.classList.add("square");
 
-            if ("name" in square) {
+            if (square.name !== "empty") {
                 const figureSvg = document.createElement("img");
                 figureSvg.setAttribute("src", square.icon);
                 figureSvg.classList.add("piece");
