@@ -7,7 +7,7 @@ const chessBoard = board();
 chessBoard.setBoard(startingFEN);
 drawBoard(chessBoard.squares);
 
-console.log(generateMoves(chessBoard.getSquare(54)));
+console.log(generateMoves(chessBoard.getSquare(1)));
 
 function generateMoves(piece) {
     const moves = [];
@@ -33,6 +33,19 @@ function generateMoves(piece) {
             } else {
                 const rows = chessBoard.rowsTravelled(piece.position, target.position);
                 if (rows === 1 && target.name !== "empty" && target.color !== piece.color) {
+                    moves.push(target.position);
+                }
+            }
+        }
+    } else if (piece.name === "knight") {
+        for (const offset of piece.offsets) {
+            const target = chessBoard.getSquare(piece.position + offset);
+            if (!target) continue;
+
+            const rows = chessBoard.rowsTravelled(piece.position, target.position);
+
+            if (rows === 2 || rows === 1) {
+                if (target.name === "empty" || target.color !== piece.color) {
                     moves.push(target.position);
                 }
             }
