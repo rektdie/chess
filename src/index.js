@@ -7,7 +7,10 @@ const chessBoard = board();
 chessBoard.setBoard(startingFEN);
 drawBoard(chessBoard.squares);
 
-console.log(generateMoves(chessBoard.getSquare(1)));
+const threatMap = {};
+
+console.log(generateMoves(chessBoard.getSquare(62)));
+console.log(threatMap);
 
 function generateMoves(piece) {
     const moves = [];
@@ -16,24 +19,26 @@ function generateMoves(piece) {
         for (const offset of piece.offsets) {
             const target = chessBoard.getSquare(piece.position + offset);
             if (!target) continue;
-
-            if (!piece.hasMoved) {
-                if (offset % 2 === 0) {
-                    moves.push(target.position, target.position + offset);
-                    return moves;
-                } else {
-                    continue;
-                }
-            }
-
+            
             if (offset % 2 === 0) {
                 if (target.name === "empty") {
                     moves.push(target.position);
+
+                    if (!piece.hasMoved && chessBoard.getSquare(target.position + offset).name === "empty") {
+                        moves.push(target.position + offset);
+                    }
                 }
             } else {
                 const rows = chessBoard.rowsTravelled(piece.position, target.position);
-                if (rows === 1 && target.name !== "empty" && target.color !== piece.color) {
-                    moves.push(target.position);
+
+                if (rows === 1) {
+                    pushThreatMap(piece, target);
+
+                    if (target.name !== "empty") {  
+                        if (target.color !== piece.color) {
+                            moves.push(target.position);
+                        }
+                    }
                 }
             }
         }
@@ -47,12 +52,21 @@ function generateMoves(piece) {
             if (rows === 2 || rows === 1) {
                 if (target.name === "empty" || target.color !== piece.color) {
                     moves.push(target.position);
+                    pushThreatMap(piece, target);
                 }
             }
         }
     }
 
     return moves;
+}
+
+function pushThreatMap(attacker, target) {
+    if (threatMap[target.position]) {
+        threatMap[target.position].push(attacker);
+    } else {
+        threatMap[target.position] = [attacker];
+    }
 }
 
 export { chessBoard };
