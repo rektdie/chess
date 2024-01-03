@@ -19,7 +19,7 @@ function generateMoves(piece) {
         for (const offset of piece.offsets) {
             const target = chessBoard.getSquare(piece.position + offset);
             if (!target) continue;
-            
+
             if (offset % 2 === 0) {
                 if (target.name === "empty") {
                     moves.push(target.position);
@@ -34,10 +34,8 @@ function generateMoves(piece) {
                 if (rows === 1) {
                     pushThreatMap(piece, target);
 
-                    if (target.name !== "empty") {  
-                        if (target.color !== piece.color) {
-                            moves.push(target.position);
-                        }
+                    if (target.name !== "empty" && target.color !== piece.color) {
+                        moves.push(target.position);
                     }
                 }
             }
@@ -50,9 +48,23 @@ function generateMoves(piece) {
             const rows = chessBoard.rowsTravelled(piece.position, target.position);
 
             if (rows === 2 || rows === 1) {
+                pushThreatMap(piece, target);
                 if (target.name === "empty" || target.color !== piece.color) {
                     moves.push(target.position);
-                    pushThreatMap(piece, target);
+                }
+            }
+        }
+    } else if (piece.name === "king") {
+        for (const offset of piece.offsets) {
+            const target = chessBoard.getSquare(piece.position + offset);
+            if (!target) continue;
+
+            const rows = chessBoard.rowsTravelled(piece.position, target.position);
+
+            if (rows === 1 || rows === 0) {
+                pushThreatMap(piece, target);
+                if (target.name === "empty" || target.color !== piece.color) {
+                    moves.push(target.position);
                 }
             }
         }
@@ -67,6 +79,20 @@ function pushThreatMap(attacker, target) {
     } else {
         threatMap[target.position] = [attacker];
     }
+}
+
+function findEnemyThreats(currentColor) {
+    const threats = [];
+
+    for (const [key, value] of Object.entries(threatMap)) {
+        for (const attacker of value) {
+            if (attacker.color !== currentColor) {
+                threats.push(Number(key));
+            }
+        }
+    }
+
+    return threats;
 }
 
 export { chessBoard };
