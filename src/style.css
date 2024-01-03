@@ -25,11 +25,11 @@ body {
 }
 
 .dark {
-    background-color: rgb(89, 53, 53);
+    background-color: #B88762;
 }
 
 .light {
-    background-color: white;
+    background-color: #EDD6B0;
 }
 
 .fen-section {
