@@ -4,12 +4,11 @@ import { drawBoard } from "./dom";
 const startingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const chessBoard = board();
+const threatMap = {};
 chessBoard.setBoard(startingFEN);
+console.log(generateMoves(chessBoard.getSquare(2)));
 drawBoard(chessBoard.squares);
 
-const threatMap = {};
-
-console.log(generateMoves(chessBoard.getSquare(1)));
 console.log(threatMap);
 
 function generateMoves(piece) {
@@ -68,6 +67,35 @@ function generateMoves(piece) {
                 }
             }
         }
+    } else {
+        for (const offset of piece.offsets) {
+            let target = chessBoard.getSquare(piece.position + offset);
+            if (!target) continue;
+            let rows = chessBoard.rowsTravelled(piece.position, target.position);
+
+            if (rows === 1 || rows === 0) {
+                while (true) {
+                    pushThreatMap(piece, target);
+
+                    if (target.name === "empty") {
+                        moves.push(target.position);
+                    } else {
+                        if (target.color !== piece.color) {
+                            moves.push(target.position);
+                        }
+                        break;
+                    }
+
+                    const previousTarget = target;
+                    const previousRows = rows;
+
+                    target = chessBoard.getSquare(previousTarget.position + offset);
+                    if (!target) break;
+                    rows = chessBoard.rowsTravelled(previousTarget.position, target.position);
+                    if (rows !== previousRows) break;
+                }
+            }
+        }
     }
 
     return moves;
@@ -95,4 +123,4 @@ function findEnemyThreats(currentColor) {
     return threats;
 }
 
-export { chessBoard };
+export { chessBoard, threatMap };

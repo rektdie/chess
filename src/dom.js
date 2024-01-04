@@ -1,5 +1,5 @@
 import "./style.css";
-import { chessBoard } from "./index.js";
+import { chessBoard, threatMap } from "./index.js";
 
 const fenInput = document.querySelector("#fen-input");
 const fenButton = document.querySelector("#fen-set");
@@ -22,9 +22,17 @@ function drawBoard(board) {
             }
 
             if ((board.indexOf(row) + square.position) % 2 == 0) {
-                squareDiv.classList.add("light");
+                if (square.position in threatMap) {
+                    squareDiv.classList.add("threat-light")
+                } else {
+                    squareDiv.classList.add("light");
+                }
             } else {
-                squareDiv.classList.add("dark");
+                if (square.position in threatMap) {
+                    squareDiv.classList.add("threat-dark")
+                } else {
+                    squareDiv.classList.add("dark");
+                }
             }
 
             rowDiv.appendChild(squareDiv);
