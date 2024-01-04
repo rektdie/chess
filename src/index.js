@@ -9,7 +9,7 @@ drawBoard(chessBoard.squares);
 
 const threatMap = {};
 
-console.log(generateMoves(chessBoard.getSquare(62)));
+console.log(generateMoves(chessBoard.getSquare(1)));
 console.log(threatMap);
 
 function generateMoves(piece) {
@@ -47,7 +47,7 @@ function generateMoves(piece) {
 
             const rows = chessBoard.rowsTravelled(piece.position, target.position);
 
-            if (rows === 2 || rows === 1) {
+            if ((offset % 2 === 0 && rows === 1) || (offset % 2 !== 0 && rows === 2)) {
                 pushThreatMap(piece, target);
                 if (target.name === "empty" || target.color !== piece.color) {
                     moves.push(target.position);
