@@ -6,12 +6,24 @@ const startingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const chessBoard = board();
 const threatMap = {};
 chessBoard.setBoard(startingFEN);
-console.log(generateMoves(chessBoard.getSquare(2)));
+const moves = generateAllMoves();
+
+function generateAllMoves() {
+    const allMoves = {};
+
+    for (const row of chessBoard.squares) {
+        for (const piece of row) {
+            if (piece.name !== "empty") {
+                allMoves[piece.position] = generatePieceMoves(piece);
+            }
+        }
+    }
+    return allMoves;
+}
+
 drawBoard(chessBoard.squares);
 
-console.log(threatMap);
-
-function generateMoves(piece) {
+function generatePieceMoves(piece) {
     const moves = [];
 
     if (piece.name === "pawn") {
