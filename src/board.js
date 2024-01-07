@@ -1,4 +1,5 @@
 import { Pawn, King, Queen, Knight, Bishop, Rook, Empty } from "./pieces";
+import { newTurn } from "./index";
 
 const board = () => {
     const squares = [];
@@ -150,10 +151,10 @@ const board = () => {
         return moves;
     }
 
-    function generateAllMoves(currentBoard) {
+    function generateAllMoves() {
         const allMoves = {};
 
-        for (const row of currentBoard.squares) {
+        for (const row of squares) {
             for (const piece of row) {
                 if (piece.name !== "empty") {
                     allMoves[piece.position] = generatePieceMoves(piece);
@@ -185,7 +186,28 @@ const board = () => {
         return threats;
     }
 
-    return { squares, threatMap, getSquare, setBoard, generateAllMoves };
+    function movePiece(attacker, target) {
+        const firstMovePieces = ["pawn", "king", "rook"];
+
+        const targetRow = Math.floor(target.position / 8);
+        const targetSquare = target.position % 8;
+
+        const oldRow = Math.floor(attacker.position / 8);
+        const oldSquare = attacker.position % 8;
+
+        squares[oldRow][oldSquare] = Empty(attacker.position);
+        attacker.position = target.position;
+        squares[targetRow][targetSquare] = attacker;
+
+        if (firstMovePieces.includes(attacker.name)) {
+            attacker.hasMoved = true;
+        }
+
+        newTurn();
+        console.log(getSquare(attacker.position));
+    }
+
+    return { squares, threatMap, getSquare, setBoard, generateAllMoves, movePiece };
 };
 
 export { board };
