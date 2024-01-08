@@ -57,13 +57,15 @@ function drawBoard(board) {
             });
 
             squareDiv.addEventListener("drop", e => {
-                const targetIndex = e.target.getAttribute("data-index");
+                if (!dragging) return;
+                let targetIndex = squareDiv.getAttribute("data-index");
                 const attackerPos = dragging.parentElement
                     .getAttribute("data-index");
 
                 if (colorToMove === board.getSquare(attackerPos).color) {
                     if (moves[attackerPos].includes(Number(targetIndex))) {
-                        e.target.appendChild(dragging);
+                        squareDiv.innerHTML = "";
+                        squareDiv.appendChild(dragging);
                         board.movePiece(board.getSquare(attackerPos), board.getSquare(targetIndex));
                     }
                 }
