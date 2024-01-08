@@ -123,7 +123,9 @@ const board = () => {
                 if (!target) continue;
                 let rows = rowsTravelled(piece.position, target.position);
 
-                if (rows === 1 || rows === 0) {
+                if (((offset % 2 !== 0 && Math.abs(offset) !== 1) && rows === 1)
+                    || (offset % 2 === 0 && rows === 1)
+                    || (Math.abs(offset) === 1 && rows === 0)) {
                     while (true) {
                         pushThreatMap(piece, target);
 
